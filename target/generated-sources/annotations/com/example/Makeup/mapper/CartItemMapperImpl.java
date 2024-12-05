@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-11-10T18:08:01+0700",
+    date = "2024-12-05T20:31:14+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
 )
 @Component
@@ -25,9 +25,14 @@ public class CartItemMapperImpl implements CartItemMapper {
 
         cartItemDTO.setCartId( cartItemCartId( cartItem ) );
         cartItemDTO.setProductId( cartItemProductId( cartItem ) );
+        cartItemDTO.setProductName( cartItemProductNameProduct( cartItem ) );
+        cartItemDTO.setImageFirst( cartItemProductImage( cartItem ) );
         cartItemDTO.setId( cartItem.getId() );
         cartItemDTO.setQuantity( cartItem.getQuantity() );
         cartItemDTO.setPrice( cartItem.getPrice() );
+        cartItemDTO.setUseDate( cartItem.getUseDate() );
+
+        setImageFirst( cartItemDTO, cartItem );
 
         return cartItemDTO;
     }
@@ -45,6 +50,7 @@ public class CartItemMapperImpl implements CartItemMapper {
         cartItem.setId( cartItemDTO.getId() );
         cartItem.setQuantity( cartItemDTO.getQuantity() );
         cartItem.setPrice( cartItemDTO.getPrice() );
+        cartItem.setUseDate( cartItemDTO.getUseDate() );
 
         return cartItem;
     }
@@ -71,6 +77,36 @@ public class CartItemMapperImpl implements CartItemMapper {
         }
         int id = product.getId();
         return id;
+    }
+
+    private String cartItemProductNameProduct(CartItem cartItem) {
+        if ( cartItem == null ) {
+            return null;
+        }
+        Product product = cartItem.getProduct();
+        if ( product == null ) {
+            return null;
+        }
+        String nameProduct = product.getNameProduct();
+        if ( nameProduct == null ) {
+            return null;
+        }
+        return nameProduct;
+    }
+
+    private String cartItemProductImage(CartItem cartItem) {
+        if ( cartItem == null ) {
+            return null;
+        }
+        Product product = cartItem.getProduct();
+        if ( product == null ) {
+            return null;
+        }
+        String image = product.getImage();
+        if ( image == null ) {
+            return null;
+        }
+        return image;
     }
 
     protected Cart cartItemDTOToCart(CartItemDTO cartItemDTO) {

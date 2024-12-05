@@ -2,12 +2,14 @@ package com.example.Makeup.mapper;
 
 import com.example.Makeup.dto.StaffDTO;
 import com.example.Makeup.entity.Staff;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-11-10T18:08:01+0700",
+    date = "2024-12-05T20:31:14+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
 )
 @Component
@@ -41,5 +43,19 @@ public class StaffMapperImpl implements StaffMapper {
         staff.setPhone( staffDTO.getPhone() );
 
         return staff;
+    }
+
+    @Override
+    public List<StaffDTO> toStaffDTOList(List<Staff> staffList) {
+        if ( staffList == null ) {
+            return null;
+        }
+
+        List<StaffDTO> list = new ArrayList<StaffDTO>( staffList.size() );
+        for ( Staff staff : staffList ) {
+            list.add( toStaffDTO( staff ) );
+        }
+
+        return list;
     }
 }

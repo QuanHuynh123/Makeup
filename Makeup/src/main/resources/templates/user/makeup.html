@@ -26,6 +26,18 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+         <script>
+            function clickMakeUpService(service) {
+                const form = document.getElementById('request');
+                if (form) {
+                    form.scrollIntoView({ behavior: 'smooth' }); // Cuộn mượt
+                       const select = document.getElementById('optionsMakeup');
+                        select.value = service;
+                } else {
+                    console.error('Form không tồn tại!');
+                }
+            }
+         </script>
       </layout:fragment>
    </head>
    <!-- body -->
@@ -112,7 +124,7 @@
             </div>
 
             <div class="makeup-section row center_column">
-               <button class="btn_title_makeup" onclick="clickMakeUpService(1)">Makeup Thời Trang</button>
+               <button class="btn_title_makeup" onclick="clickMakeUpService(6)">Makeup Thời Trang</button>
                <div class="row-container">
                   <ul class="row ul_option">
                      <li>

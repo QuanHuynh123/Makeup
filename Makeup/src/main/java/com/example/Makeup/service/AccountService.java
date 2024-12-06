@@ -102,4 +102,10 @@ public class AccountService implements UserDetailsService {
             throw new AppException(ErrorCode.CANT_FOUND);
         }
     }
+
+    // Phương thức kiểm tra xem username đã tồn tại hay chưa (không phân biệt hoa thường)
+    public boolean isUsernameExists(String username) {
+        Optional<Account> account = accountRepository.findByUserNameIgnoreCase(username);
+        return account.isPresent();
+    }
 }

@@ -2,6 +2,7 @@ package com.example.Makeup.controller.web.admin;
 
 import com.example.Makeup.dto.AppointmentDetailDTO;
 import com.example.Makeup.dto.StaffDTO;
+import com.example.Makeup.dto.StaffDetailDTO;
 import com.example.Makeup.repository.AppointmentRepository;
 import com.example.Makeup.repository.OrderRepository;
 import com.example.Makeup.service.AppointmentService;
@@ -34,7 +35,7 @@ public class AdminController {
 
     @GetMapping("/test")
     public String loginPage(Model model) {
-        List<StaffDTO> staffList = staffService.getAllStaff();
+        List<StaffDetailDTO> staffList = staffService.getAllStaffDetail();
         model.addAttribute("staffList", staffList); // Truyền danh sách nhân viên vào model
         return "admin/staff-all";
     }

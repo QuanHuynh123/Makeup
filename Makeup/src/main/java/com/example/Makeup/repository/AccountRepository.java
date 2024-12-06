@@ -17,4 +17,7 @@ public interface AccountRepository  extends JpaRepository<Account,Integer> {
 
 //    @Query("SELECT a FROM Account a JOIN Staff s ON a.id = s.accountid")
 //    List<Account> findAllAccountsWithStaff();
+
+    // Phương thức tìm kiếm username không phân biệt hoa thường
+    Optional<Account> findByUserNameIgnoreCase(String username);
 }

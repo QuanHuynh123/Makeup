@@ -40,13 +40,8 @@
         <div class="d-flex justify-content-between mb-3">
             <!-- Thanh tìm kiếm bên trái -->
             <div class="form-inline">
-                <input class="form-control" type="text" placeholder="Tìm kiếm lịch hẹn" id="searchStaff"
-                    oninput="searchStaff()">
-            </div>
-
-            <!-- Nút thêm nhân viên bên phải -->
-            <div>
-                <button class="btn btn-primary" onclick="test()">Thêm lịch hẹn</button>
+                <input class="form-control" type="text" placeholder="Tìm kiếm lịch hẹn" id="searchAppointment"
+                    oninput="searchAppointment()">
             </div>
         </div>
 
@@ -79,11 +74,11 @@
                         <td th:text="${appointment.status ? 'Hoàn thành' : 'Chưa hoàn thành'}">Tình Trạng</td>
                         <td>
                             <button type="button" class="btn btn-warning btn-sm" th:attr="data-id=${appointment.id}"
-                                onclick="editCustomer(this)">
+                                onclick="editAppointment(this)">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </button>
                             <button type="button" class="btn btn-danger btn-sm" th:attr="data-id=${appointment.id}"
-                                onclick="deleteCustomer(this)">
+                                onclick="deleteAppointment(this)">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                         </td>
@@ -156,32 +151,65 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addModalLabel">Thêm nhân viên</h5>
+                    <h5 class="modal-title" id="addModalAppointmentLabel">Thêm cuộc hẹn</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="addForm" onsubmit="return false;">
-                        <div class="mb-3 d-none" id="staffId">
-                            <label for="addCustomerId" class="form-label">Id</label>
-                            <input type="text" class="form-control" id="addCustomerId" required disabled>
+                        <div class="mb-3 d-none" id="appointmentId">
+                            <label for="addAppointmentId" class="form-label">Id</label>
+                            <input type="text" class="form-control" id="addAppointmentId" required disabled>
                         </div>
                         <div class="mb-3">
-                            <label for="addCustomerName" class="form-label">Tên nhân viên</label>
-                            <input type="text" class="form-control" id="addCustomerName" required>
+                            <label for="addKhachHang" class="form-label">Khách hàng</label>
+                            <input type="text" class="form-control" id="addKhachHang" required disabled>
                         </div>
                         <div class="mb-3">
-                            <label for="addPhoneNumber" class="form-label">Số điện thoại</label>
-                            <input type="text" class="form-control" id="addPhoneNumber" required>
+                            <label for="addNhanVien" class="form-label">Nhân viên</label>
+                            <select class="form-select" id="addNhanVien" required>
+                                <option value="" disabled selected>Chọn nhân viên</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="addServiceMakeupName" class="form-label">Dịch Vụ Makeup</label>
+                            <select class="form-select" id="addServiceMakeupName" required
+                                onchange="loadEndtime(); findAvailableStaff()">
+                                <option value="" disabled selected>Chọn dịch vụ</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="addMakeupDate" class="form-label">Ngày Makeup</label>
+                            <input type="date" class="form-control" id="addMakeupDate" required
+                                onchange="findAvailableStaff()">
+                        </div>
+                        <div class="mb-3">
+                            <label for="addStartTime" class="form-label">Thời gian bắt đầu</label>
+                            <input type="time" class="form-control" id="addStartTime" required
+                                onchange="loadEndtime(); findAvailableStaff()" step="60">
+                        </div>
+                        <div class="mb-3">
+                            <label for="addEndTime" class="form-label">Thời gian kết thúc</label>
+                            <input type="time" class="form-control" id="addEndTime" required disabled step="60">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="addStatus" class="form-label">Tình trạng</label>
+                            <select class="form-select" id="addStatus" required>
+                                <option value="1">Duyệt</option>
+                                <option value="0">Chưa duyệt</option>
+                            </select>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="saveButton" onclick="saveChanges()">Lưu</button>
+                    <button type="button" class="btn btn-primary" id="saveButtonAppointment"
+                        onclick="saveChangesAppointment()">Lưu</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>
         </div>
     </div>
+
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

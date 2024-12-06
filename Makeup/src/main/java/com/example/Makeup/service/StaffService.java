@@ -1,5 +1,6 @@
 package com.example.Makeup.service;
 import com.example.Makeup.dto.StaffDTO;
+import com.example.Makeup.dto.StaffDetailDTO;
 import com.example.Makeup.entity.Account;
 import com.example.Makeup.entity.Appointment;
 import com.example.Makeup.entity.Staff;
@@ -36,7 +37,10 @@ public class StaffService {
         return staffMapper.toStaffDTOList(staffList);
     }
 
-
+    public List<StaffDetailDTO> getAllStaffDetail() {
+        // Truy vấn danh sách từ repository
+        return staffRepository.findAllStaffWithDetails();
+    }
 
     public Optional<Staff> getStaffById(int id) {
         return staffRepository.findById(id);
@@ -70,5 +74,13 @@ public class StaffService {
         }
     }
 
+    public StaffDetailDTO getStaffDetailById(int staffId) {
+        // Tìm nhân viên theo ID và trả về thông tin chi tiết
+        return staffRepository.findStaffDetailById(staffId);
+    }
+
+    public Staff updateStaff(Staff staff) {
+        return staffRepository.save(staff); // Sử dụng save() để cập nhật nếu đối tượng đã tồn tại
+    }
 
 }

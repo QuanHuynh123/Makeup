@@ -1,6 +1,7 @@
 package com.example.Makeup.mapper;
 
 import com.example.Makeup.dto.StaffDTO;
+import com.example.Makeup.entity.Account;
 import com.example.Makeup.entity.Staff;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-12-05T20:31:14+0700",
+    date = "2024-12-06T19:01:19+0700",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.2 (Oracle Corporation)"
 )
 @Component
@@ -23,6 +24,10 @@ public class StaffMapperImpl implements StaffMapper {
 
         StaffDTO staffDTO = new StaffDTO();
 
+        Integer id = staffAccountId( staff );
+        if ( id != null ) {
+            staffDTO.setAccountId( String.valueOf( id ) );
+        }
         staffDTO.setId( staff.getId() );
         staffDTO.setNameStaff( staff.getNameStaff() );
         staffDTO.setPhone( staff.getPhone() );
@@ -38,6 +43,7 @@ public class StaffMapperImpl implements StaffMapper {
 
         Staff staff = new Staff();
 
+        staff.setAccount( staffDTOToAccount( staffDTO ) );
         staff.setId( staffDTO.getId() );
         staff.setNameStaff( staffDTO.getNameStaff() );
         staff.setPhone( staffDTO.getPhone() );
@@ -57,5 +63,31 @@ public class StaffMapperImpl implements StaffMapper {
         }
 
         return list;
+    }
+
+    private Integer staffAccountId(Staff staff) {
+        if ( staff == null ) {
+            return null;
+        }
+        Account account = staff.getAccount();
+        if ( account == null ) {
+            return null;
+        }
+        int id = account.getId();
+        return id;
+    }
+
+    protected Account staffDTOToAccount(StaffDTO staffDTO) {
+        if ( staffDTO == null ) {
+            return null;
+        }
+
+        Account account = new Account();
+
+        if ( staffDTO.getAccountId() != null ) {
+            account.setId( Integer.parseInt( staffDTO.getAccountId() ) );
+        }
+
+        return account;
     }
 }

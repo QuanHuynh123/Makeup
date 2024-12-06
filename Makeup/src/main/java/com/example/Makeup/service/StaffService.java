@@ -1,13 +1,16 @@
 package com.example.Makeup.service;
 import com.example.Makeup.dto.StaffDTO;
 import com.example.Makeup.entity.Account;
+import com.example.Makeup.entity.Appointment;
 import com.example.Makeup.entity.Staff;
 import com.example.Makeup.mapper.StaffMapper;
+import com.example.Makeup.repository.AppointmentRepository;
 import com.example.Makeup.repository.StaffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StaffService {
@@ -15,13 +18,24 @@ public class StaffService {
     private StaffRepository staffRepository;
 
     @Autowired
+    private AppointmentRepository appointmentRepository;
+
+    @Autowired
     private StaffMapper staffMapper;
 
     public List<StaffDTO> getAllStaff() {
-        // Sử dụng mapper để chuyển đổi danh sách Staff sang StaffDTO
+        // Truy vấn tất cả các nhân viên từ repository
         List<Staff> staffList = staffRepository.findAll();
-        return staffMapper.toStaffDTOList(staffList); // Chuyển đổi danh sách
+
+        // Lọc bỏ các nhân viên có id <= 0
+        staffList = staffList.stream()
+                .filter(staff -> staff.getId() > 0)
+                .collect(Collectors.toList());
+
+        // Chuyển đổi danh sách Staff sang StaffDTO
+        return staffMapper.toStaffDTOList(staffList);
     }
+
 
 
     public Optional<Staff> getStaffById(int id) {
@@ -41,4 +55,20 @@ public class StaffService {
     public void deleteStaff(int id) {
         staffRepository.deleteById(id);
     }
+
+    public void updateAppointmentsStaffId(int staffId) {
+        // Lấy Staff có id = 0 từ cơ sở dữ liệu
+        Staff defaultStaff = staffRepository.findById(0).orElseThrow(() -> new RuntimeException("Staff with ID 0 not found"));
+
+        // Cập nhật tất cả các lịch hẹn có staffId là nhân viên bị xóa
+        List<Appointment> appointments = appointmentRepository.findByStaffId(staffId);
+
+        // Duyệt qua các lịch hẹn và cập nhật staff thành staff có id = 0
+        for (Appointment appointment : appointments) {
+            appointment.setStaff(defaultStaff);  // Thay staff hiện tại bằng staff có id = 0
+            appointmentRepository.save(appointment);  // Lưu lại các thay đổi
+        }
+    }
+
+
 }

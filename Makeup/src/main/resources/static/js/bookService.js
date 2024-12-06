@@ -92,7 +92,7 @@ $(document).ready(function () {
                 startTime: startTime + ":00",
                 endTime: endTime + ":00",
                 makeupDate: date,
-                status: true,
+                status: false,
                 "userId": 1,
                 "serviceMakeupId": serviceOption,
                 "staffId": serviceStaff

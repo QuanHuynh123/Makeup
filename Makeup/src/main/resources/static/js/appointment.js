@@ -22,7 +22,7 @@
         }, 3000);
     }
 // Load danh sách khách hàng
-function loadCustomers() {
+function loadAppointmentsDetail() {
     fetch('/admin/customers/listCustomer')
         .then(response => response.json())
         .then(data => {
@@ -51,10 +51,10 @@ function loadCustomers() {
 }
 
 // Hiển thị modal thêm khách hàng
-function showAddModal() {
+function showAddModalAppointment() {
     document.getElementById('addForm').reset();
-    const addModal = new bootstrap.Modal(document.getElementById('addModal'));
-    addModal.show();
+    const addModalAppointment = new bootstrap.Modal(document.getElementById('addModalAppointment'));
+    addModalAppointment.show();
 }
 
 
@@ -75,8 +75,8 @@ function addCustomer() {
     })
         .then(response => {
             if (response.ok) {
-                loadCustomers();
-                new bootstrap.Modal(document.getElementById('addModal')).hide();
+                loadAppointmentsDetail();
+                new bootstrap.Modal(document.getElementById('addModalAppointment')).hide();
             } else {
                 alert('Lỗi khi thêm khách hàng!');
             }
@@ -137,7 +137,7 @@ function saveChanges() {
     })
         .then(response => {
             if (response.ok) {
-                loadCustomers();
+                loadAppointmentsDetail();
                 new bootstrap.Modal(document.getElementById('editModal')).hide();
             } else {
                 alert('Lỗi khi lưu thay đổi!');
@@ -153,7 +153,7 @@ function deleteCustomer(id) {
         fetch(`/admin/customers/${id}`, { method: 'DELETE' })
             .then(response => {
                 if (response.ok) {
-                    loadCustomers();
+                    loadAppointmentsDetail();
                     deleteModal.hide();
                 } else {
                     showAlert('danger', 'Lỗi khi xóa khách hàng!');
@@ -198,11 +198,23 @@ function filterCustomers() {
 }
 
 // Tải danh sách khách hàng khi trang được load
-document.addEventListener('DOMContentLoaded', loadCustomers);
+document.addEventListener('DOMContentLoaded', loadAppointmentsDetail);
 */
 // Hàm hiển thị thông báo
 
 let staffList = [];
+
+// Hàm mở modal thêm lịch
+function showAddModalAppointment() {
+    // Reset form và ẩn ID nhân viên
+    document.getElementById('addForm').reset();
+    document.getElementById("addModalAppointmentLabel").innerHTML = "Thêm nhân viên";
+    document.getElementById('staffId').classList.add("d-none");
+    // Đặt thuộc tính "data-action" của nút lưu là "add"
+    document.getElementById('saveButton').setAttribute('data-action', 'add');
+    const addModalAppointment = new bootstrap.Modal(document.getElementById('addModalAppointment'));
+    addModalAppointment.show();
+}
 
 function showAlert(type, message) {
     const alertBox = document.createElement('div');
@@ -210,7 +222,7 @@ function showAlert(type, message) {
     alertBox.innerText = message;
 
     alertBox.style.position = 'fixed';
-    alertBox.style.top = '20px';
+    alertBox.style.top = '10%';
     alertBox.style.left = '50%';
     alertBox.style.transform = 'translateX(-50%)';
     alertBox.style.zIndex = '9999';
@@ -219,7 +231,7 @@ function showAlert(type, message) {
 
     setTimeout(() => {
         alertBox.style.opacity = '0';
-        alertBox.style.transform = 'translateX(-50%) translateY(-10px)';
+        alertBox.style.transform = 'translateX(-50%) translateY(-50%)';
         setTimeout(() => {
             alertBox.remove();
         }, 600);
@@ -227,8 +239,8 @@ function showAlert(type, message) {
 }
 
 // Hàm tải danh sách nhân viên
-function loadCustomers() {
-    fetch('/api/staff')
+function loadAppointmentsDetail() {
+    fetch('/api/appointments')
         .then(response => response.json())
         .then(data => {
             // Gọi renderStaffTable để hiển thị dữ liệu vào bảng
@@ -241,19 +253,19 @@ function loadCustomers() {
 }
 
 // Hàm xóa khách hàng
-function deleteCustomer(button) {
-    const customerId = button.getAttribute('data-id');
+function deleteStaff(id) {
+    const customerId = id;
     const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
 
     document.getElementById('confirmDeleteButton').onclick = function () {
-        fetch(`/admin/customers/delete/${customerId}`, { method: 'DELETE' })
+        fetch(`/api/staff/${customerId}`, { method: 'DELETE' })
             .then(response => {
                 if (response.ok) {
-                    showAlert('success', 'Xóa khách hàng thành công!');
-                    loadCustomers();
+                    showAlert('success', 'Xóa nhân viên thành công!');
+                    loadAppointmentsDetail();
                     clearFormSearch();
                 } else {
-                    showAlert('danger', 'Xóa khách hàng thất bại!');
+                    showAlert('danger', 'Xóa nhân viên thất bại!');
                 }
                 confirmDeleteModal.hide();
             })
@@ -267,23 +279,14 @@ function deleteCustomer(button) {
 }
 
 
-// Hàm mở modal thêm nhân viên
-function showAddModal() {
-    // Reset form và ẩn ID nhân viên
-    document.getElementById('addForm').reset();
-    document.getElementById("addModalLabel").innerHTML = "Thêm nhân viên";
-    document.getElementById('staffId').classList.add("d-none");
-    // Đặt thuộc tính "data-action" của nút lưu là "add"
-    document.getElementById('saveButton').setAttribute('data-action', 'add');
-    const addModal = new bootstrap.Modal(document.getElementById('addModal'));
-    addModal.show();
-}
+
+
 
 // Hàm chỉnh sửa thông tin nhân viên
-function editCustomer(button) {
+function editStaff(id) {
     // Lấy ID của nhân viên từ thuộc tính data-id
-    const staffId = button.getAttribute('data-id');
-    document.getElementById("addModalLabel").innerHTML = "Chỉnh sửa nhân viên";
+    const staffId = id;
+    document.getElementById("addModalAppointmentLabel").innerHTML = "Chỉnh sửa nhân viên";
     document.getElementById('staffId').classList.remove("d-none");
 
     // Gửi yêu cầu GET để lấy thông tin nhân viên từ API
@@ -297,7 +300,7 @@ function editCustomer(button) {
 
             // Đặt thuộc tính "data-action" của nút lưu là "edit"
             document.getElementById('saveButton').setAttribute('data-action', 'edit');
-            const editModal = new bootstrap.Modal(document.getElementById('addModal'));
+            const editModal = new bootstrap.Modal(document.getElementById('addModalAppointment'));
             editModal.show();
         })
         .catch(error => {
@@ -340,9 +343,9 @@ function addCustomer() {
         .then(response => {
             if (response.ok) {
                 showAlert('success', 'Thêm khách hàng thành công!');
-                loadCustomers();
-                const addModal = bootstrap.Modal.getInstance(document.getElementById('addModal'));
-                addModal.hide();
+                loadAppointmentsDetail();
+                const addModalAppointment = bootstrap.Modal.getInstance(document.getElementById('addModalAppointment'));
+                addModalAppointment.hide();
             } else {
                 showAlert('danger', 'Thêm khách hàng thất bại!');
             }
@@ -391,8 +394,8 @@ function saveChanges() {
             if (response.status == 200) {
                 const action = id ? 'Sửa' : 'Thêm mới';
                 showAlert('success', `${action} nhân viên thành công!`);
-                loadCustomers(); // Tải lại danh sách nhân viên
-                const editModal = bootstrap.Modal.getInstance(document.getElementById('addModal'));
+                loadAppointmentsDetail(); // Tải lại danh sách nhân viên
+                const editModal = bootstrap.Modal.getInstance(document.getElementById('addModalAppointment'));
                 editModal.hide();
                 clearFormSearch(); // Xóa form tìm kiếm nếu có
             } else {

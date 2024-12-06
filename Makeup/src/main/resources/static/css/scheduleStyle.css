@@ -3694,7 +3694,7 @@ a {
 .cd-schedule {
     position: relative;
     overflow: auto;
-    height: 400px;
+    height: 500px;
 }
 
 .cd-schedule::before {

@@ -54,10 +54,18 @@ public class StaffRestController {
         }
     }
 
-    // Xóa nhân viên và không trả về nội dung (trả về mã trạng thái 204)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStaff(@PathVariable int id) {
+        // Cập nhật các lịch hẹn có liên quan
+        staffService.updateAppointmentsStaffId(id);
+
+        // Xóa nhân viên
         staffService.deleteStaff(id);
-        return ResponseEntity.noContent().build(); // Không cần trả về đối tượng, chỉ trả về 204
+
+        // Trả về mã trạng thái 204 (No Content)
+        return ResponseEntity.noContent().build();
+
+        //Chưa làm xóa account
     }
+
 }

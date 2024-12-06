@@ -1,6 +1,7 @@
 package com.example.Makeup.controller.api.web;
 
 import com.example.Makeup.dto.AppointmentDTO;
+import com.example.Makeup.dto.AppointmentDetailDTO;
 import com.example.Makeup.dto.WeekAppointmentsDTO;
 import com.example.Makeup.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,15 @@ public class AppointmentRestController {
             @RequestParam int year) {
         return appointmentService.getAppointmentsByMonth(month, year);
     }
+//    @GetMapping
+//    public List<AppointmentDTO> getAllAppointments() {
+//        return appointmentService.getAllAppointments();
+//    }
+
     @GetMapping
-    public List<AppointmentDTO> getAllAppointments() {
-        return appointmentService.getAllAppointments();
+    public ResponseEntity<List<AppointmentDetailDTO>> getAllAppointments() {
+        List<AppointmentDetailDTO> appointments = appointmentService.getAllAppointmentsDetail();
+        return ResponseEntity.ok(appointments);
     }
 
     // Lấy cuộc hẹn theo ID

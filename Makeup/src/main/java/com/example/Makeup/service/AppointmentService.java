@@ -1,6 +1,7 @@
 package com.example.Makeup.service;
 
 import com.example.Makeup.dto.AppointmentDTO;
+import com.example.Makeup.dto.AppointmentDetailDTO;
 import com.example.Makeup.dto.WeekAppointmentsDTO;
 import com.example.Makeup.entity.Appointment;
 import com.example.Makeup.mapper.AppointmentMapper;
@@ -160,6 +161,9 @@ public class AppointmentService {
                 .map(appointmentMapper::toAppointmentDTO)
                 .collect(Collectors.toList());
     }
+    public List<Appointment> getAllAppointmentsEntity() {
+        return appointmentRepository.findAll();
+    }
     // Lấy cuộc hẹn theo ID
     public AppointmentDTO getAppointmentById(int id) {
         Optional<Appointment> appointment = appointmentRepository.findById(id);
@@ -215,6 +219,10 @@ public class AppointmentService {
         // Lưu lịch hẹn nếu không có xung đột
         Appointment savedAppointment = appointmentRepository.save(appointment);
         return appointmentMapper.toAppointmentDTO(savedAppointment);
+    }
+
+    public List<AppointmentDetailDTO> getAllAppointmentsDetail() {
+        return appointmentRepository.findAllAppointmentsWithDetails();
     }
 
 }

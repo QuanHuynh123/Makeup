@@ -22,7 +22,7 @@
         }, 3000);
     }
 // Load danh sách khách hàng
-function loadCustomers() {
+function loadStaffs() {
     fetch('/admin/customers/listCustomer')
         .then(response => response.json())
         .then(data => {
@@ -75,7 +75,7 @@ function addCustomer() {
     })
         .then(response => {
             if (response.ok) {
-                loadCustomers();
+                loadStaffs();
                 new bootstrap.Modal(document.getElementById('addModal')).hide();
             } else {
                 alert('Lỗi khi thêm khách hàng!');
@@ -137,7 +137,7 @@ function saveChanges() {
     })
         .then(response => {
             if (response.ok) {
-                loadCustomers();
+                loadStaffs();
                 new bootstrap.Modal(document.getElementById('editModal')).hide();
             } else {
                 alert('Lỗi khi lưu thay đổi!');
@@ -153,7 +153,7 @@ function deleteCustomer(id) {
         fetch(`/admin/customers/${id}`, { method: 'DELETE' })
             .then(response => {
                 if (response.ok) {
-                    loadCustomers();
+                    loadStaffs();
                     deleteModal.hide();
                 } else {
                     showAlert('danger', 'Lỗi khi xóa khách hàng!');
@@ -198,10 +198,9 @@ function filterCustomers() {
 }
 
 // Tải danh sách khách hàng khi trang được load
-document.addEventListener('DOMContentLoaded', loadCustomers);
+document.addEventListener('DOMContentLoaded', loadStaffs);
 */
 // Hàm hiển thị thông báo
-
 let staffList = [];
 
 function showAlert(type, message) {
@@ -227,7 +226,7 @@ function showAlert(type, message) {
 }
 
 // Hàm tải danh sách nhân viên
-function loadCustomers() {
+function loadStaffs() {
     fetch('/api/staff')
         .then(response => response.json())
         .then(data => {
@@ -250,8 +249,8 @@ function deleteStaff(id) {
             .then(response => {
                 if (response.ok) {
                     showAlert('success', 'Xóa nhân viên thành công!');
-                    loadCustomers();
-                    clearFormSearch();
+                    loadStaffs();
+                    clearFormSearchStaff();
                 } else {
                     showAlert('danger', 'Xóa nhân viên thất bại!');
                 }
@@ -279,6 +278,17 @@ function showAddModal() {
     addModal.show();
 }
 
+function showAddModalAppointment() {
+    // Reset form và ẩn ID nhân viên
+    document.getElementById('addForm').reset();
+    document.getElementById("addModalLabel").innerHTML = "Thêm nhân viên";
+    document.getElementById('staffId').classList.add("d-none");
+    // Đặt thuộc tính "data-action" của nút lưu là "add"
+    document.getElementById('saveButton').setAttribute('data-action', 'add');
+    const addModalAppointment = new bootstrap.Modal(document.getElementById('addModalAppointment'));
+    addModalAppointment.show();
+}
+
 // Hàm chỉnh sửa thông tin nhân viên
 function editStaff(id) {
     // Lấy ID của nhân viên từ thuộc tính data-id
@@ -291,8 +301,8 @@ function editStaff(id) {
         .then(response => response.json())
         .then(staff => {
             // Điền dữ liệu vào form
-            document.getElementById('addCustomerId').value = staff.id;
-            document.getElementById('addCustomerName').value = staff.nameStaff;
+            document.getElementById('addStaffId').value = staff.id;
+            document.getElementById('addStaffName').value = staff.nameStaff;
             document.getElementById('addPhoneNumber').value = staff.phone;
 
             // Đặt thuộc tính "data-action" của nút lưu là "edit"
@@ -308,8 +318,8 @@ function editStaff(id) {
 }
 
 // Hàm thêm khách hàng
-function addCustomer() {
-    const customerName = document.getElementById('addCustomerName').value;
+function addStaff() {
+    const customerName = document.getElementById('addStaffName').value;
     const sex = document.getElementById('addSex').value;
     const phoneNumber = document.getElementById('addPhoneNumber').value;
     const birthday = document.getElementById('addBirthday').value;
@@ -340,7 +350,7 @@ function addCustomer() {
         .then(response => {
             if (response.ok) {
                 showAlert('success', 'Thêm khách hàng thành công!');
-                loadCustomers();
+                loadStaffs();
                 const addModal = bootstrap.Modal.getInstance(document.getElementById('addModal'));
                 addModal.hide();
             } else {
@@ -353,9 +363,9 @@ function addCustomer() {
 }
 
 // Hàm lưu thay đổi thông tin nhân viên
-function saveChanges() {
-    const id = document.getElementById('addCustomerId').value;
-    const nameStaff = document.getElementById('addCustomerName').value;
+function saveChangesStaff() {
+    const id = document.getElementById('addStaffId').value;
+    const nameStaff = document.getElementById('addStaffName').value;
     const phone = document.getElementById('addPhoneNumber').value;
 
     // Kiểm tra các trường dữ liệu bắt buộc
@@ -391,10 +401,10 @@ function saveChanges() {
             if (response.status == 200) {
                 const action = id ? 'Sửa' : 'Thêm mới';
                 showAlert('success', `${action} nhân viên thành công!`);
-                loadCustomers(); // Tải lại danh sách nhân viên
+                loadStaffs(); // Tải lại danh sách nhân viên
                 const editModal = bootstrap.Modal.getInstance(document.getElementById('addModal'));
                 editModal.hide();
-                clearFormSearch(); // Xóa form tìm kiếm nếu có
+                clearFormSearchStaff(); // Xóa form tìm kiếm nếu có
             } else {
                 showAlert('danger', 'Có lỗi khi lưu thay đổi!');
             }
@@ -456,7 +466,7 @@ function renderStaffTable(data) {
 document.getElementById('searchStaff').addEventListener('input', searchStaff);
 
 // Hàm làm mới tìm kiếm
-function clearFormSearch() {
+function clearFormSearchStaff() {
     document.getElementById('searchStaff').value = '';
     //    document.getElementById('statusFilter').selectedIndex = 0;
 }

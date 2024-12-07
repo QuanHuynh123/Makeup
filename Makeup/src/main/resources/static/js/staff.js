@@ -70,8 +70,8 @@ function findAvailableStaff() {
 
         // Kiểm tra xem nhân viên này có cuộc hẹn nào trong khoảng thời gian không
         appointmentList.forEach(appointment => {
-            // Nếu cuộc hẹn trùng thời gian với nhân viên này
-            if (appointment.staffID === staffMember.id && appointment.status === 0) {
+            // Chỉ kiểm tra các cuộc hẹn đã được duyệt (status = 1)
+            if (appointment.staffID === staffMember.id && appointment.status === 1) {
                 const appointmentStart = new Date(`${appointment.makeupDate}T${appointment.startTime}`);
                 const appointmentEnd = new Date(`${appointment.makeupDate}T${appointment.endTime}`);
 
@@ -121,8 +121,9 @@ function findAvailableStaff() {
         staffSelect.appendChild(option);
     }
 
-    staffSelect.value = staff;
+    staffSelect.value = tmpAppointment.staffID;
 }
+
 
 
 
@@ -461,7 +462,7 @@ function renderStaffTable(data) {
             <td>${staff.username}</td>
             <td>${roleName}</td> <!-- Hiển thị vai trò đã chuyển đổi -->
             <td>
-                <button type="button" class="btn btn-warning btn-sm" onclick="editStaff(${staff.id})"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button type="button" class="btn btn-warning btn-sm" onclick="editStaff(${staff.id});"><i class="fa-solid fa-pen-to-square"></i></button>
                 <button type="button" class="btn btn-danger btn-sm" onclick="deleteStaff(${staff.id})"><i class="fa-solid fa-trash"></i></button>
             </td>
         `;
@@ -608,7 +609,7 @@ function editAppointment(id) {
 
             // Đặt thuộc tính "data-action" của nút lưu là "edit"
             document.getElementById('saveButtonAppointment').setAttribute('data-action', 'edit');
-
+            findAvailableStaff();
             // Hiển thị modal
             const editModal = new bootstrap.Modal(document.getElementById('addModalAppointment'));
             editModal.show();
@@ -786,7 +787,7 @@ function renderAppointmentTable(data) {
             <td>${appointment.endTime}</td>
             <td>${appointment.status ? 'Duyệt' : 'Chưa duyệt'}</td>
             <td>
-                <button type="button" class="btn btn-warning btn-sm" onclick="editAppointment(${appointment.id})"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button type="button" class="btn btn-warning btn-sm" onclick="editAppointment(${appointment.id});"><i class="fa-solid fa-pen-to-square"></i></button>
                 <button type="button" class="btn btn-danger btn-sm" onclick="deleteAppointment(${appointment.id})"><i class="fa-solid fa-trash"></i></button>
             </td>
         `;

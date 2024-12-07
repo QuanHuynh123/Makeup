@@ -25,6 +25,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
 
     @Query("SELECT a FROM Appointment a WHERE a.staff.id = :staffId " +
             "AND a.makeupDate = :makeupDate " +
+            "AND a.status = true " +  // Thêm điều kiện status = 1
             "AND ((:startTime BETWEEN a.startTime AND a.endTime) " +
             "OR (:endTime BETWEEN a.startTime AND a.endTime) " +
             "OR (a.startTime BETWEEN :startTime AND :endTime) " +
@@ -35,6 +36,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
             @Param("startTime") Time startTime,
             @Param("endTime") Time endTime
     );
+
 
     // Truy vấn số lượng appointment theo từng tháng trong năm
     @Query("SELECT MONTH(a.makeupDate) AS month, COUNT(a) AS count " +

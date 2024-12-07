@@ -58,7 +58,7 @@ public class AppointmentService {
                 appointment.getStartTime(),
                 appointment.getEndTime(),
                 appointment.getMakeupDate(),
-                appointment.isStatus(),
+                appointment.getStatus(),
                 appointment.getUser().getId(),
                 appointment.getServiceMakeup().getId(),
                 appointment.getStaff().getId()
@@ -205,6 +205,26 @@ public class AppointmentService {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Appointment not found with ID: " + id));
 
+        AppointmentDTO asd = appointmentMapper.toAppointmentDTO(appointment);
+
+        // Kiểm tra xem status có thay đổi từ 0 thành 1 không
+        boolean isStatusChangedToActive = asd.isStatus() == false && appointmentDTO.isStatus() == true;
+
+        // Nếu status thay đổi từ 0 thành 1, kiểm tra có bị trùng lịch với nhân viên không
+        if (isStatusChangedToActive) {
+            List<Appointment> conflictingAppointments = appointmentRepository.findConflictingAppointments(
+                    appointmentDTO.getStaffId(),
+                    appointmentDTO.getMakeupDate(),
+                    appointmentDTO.getStartTime(),
+                    appointmentDTO.getEndTime()
+            );
+
+            // Nếu có cuộc hẹn xung đột
+            if (!conflictingAppointments.isEmpty()) {
+                throw new RuntimeException("Có cuộc hẹn xung đột với nhân viên vào cùng thời gian này!");
+            }
+        }
+
         // Cập nhật các thuộc tính từ appointmentDTO
         appointment.setStartTime(appointmentDTO.getStartTime());
         appointment.setEndTime(appointmentDTO.getEndTime());
@@ -236,6 +256,7 @@ public class AppointmentService {
                 .result(updatedAppointmentDTO)
                 .build();
     }
+
 
 
 

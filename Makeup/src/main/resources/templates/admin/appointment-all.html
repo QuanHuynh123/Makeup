@@ -74,7 +74,7 @@
                         <td th:text="${appointment.status ? 'Hoàn thành' : 'Chưa hoàn thành'}">Tình Trạng</td>
                         <td>
                             <button type="button" class="btn btn-warning btn-sm" th:attr="data-id=${appointment.id}"
-                                onclick="editAppointment(this)">
+                                onclick="editAppointment(this);loadEndtime()">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </button>
                             <button type="button" class="btn btn-danger btn-sm" th:attr="data-id=${appointment.id}"

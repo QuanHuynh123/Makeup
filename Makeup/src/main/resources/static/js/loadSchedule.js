@@ -214,9 +214,11 @@ function showAppointmentDetails(appointmentId, appointments) {
 		`${appointment.startTime} - ${appointment.endTime}`;
 	modal.querySelector('.cd-schedule-modal__name').textContent = appointment.title || `Appointment ID: ${appointment.id}`;
 	modal.querySelector('.cd-schedule-modal__event-info').innerHTML = `
-        <p><strong>Location:</strong> ${appointment.location || "N/A"}</p>
-        <p><strong>Description:</strong> ${appointment.description || "No description available"}</p>
-    `;
+    <p><strong>Makeup Date:</strong> ${appointment.makeupDate || "N/A"}</p>
+    <p><strong>Start Time:</strong> ${appointment.startTime || "N/A"}</p>
+    <p><strong>End Time:</strong> ${appointment.endTime || "N/A"}</p>
+`;
+
 
 	// Thay đổi màu header của modal theo màu của appointment
 	const modalHeader = modal.querySelector('.cd-schedule-modal__header-bg');

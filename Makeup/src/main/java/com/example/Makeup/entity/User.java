@@ -42,6 +42,6 @@ public class User {
     Cart cart;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id", nullable = false)
+    @JoinColumn(name = "account_id", nullable = true)
     Account account;
 }

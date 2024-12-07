@@ -29,6 +29,6 @@ public class Staff {
     List<Appointment> appointments; // Một nhân viên có thể có nhiều cuộc hẹn
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "account_id")  // Thêm khóa ngoại account_id
+    @JoinColumn(name = "account_id") // Thêm khóa ngoại account_id
     Account account;
 }

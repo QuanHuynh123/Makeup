@@ -160,6 +160,7 @@ $(document).ready(function () {
             var startDate = new Date(`${date}T${startTime}`);
             startDate.setMinutes(startDate.getMinutes() + timeNeed * 60);
             endTime = startDate.toTimeString().split(' ')[0].slice(0, 5);
+
         } else {
             console.log("Start time or duration is missing or invalid");
         }

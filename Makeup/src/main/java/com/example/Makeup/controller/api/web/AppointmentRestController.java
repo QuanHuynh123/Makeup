@@ -28,10 +28,10 @@ public class AppointmentRestController {
         return appointmentService.getAppointmentsByMonth(month, year, staffID);
     }
 
-//    @GetMapping
-//    public List<AppointmentDTO> getAllAppointments() {
-//        return appointmentService.getAllAppointments();
-//    }
+    // @GetMapping
+    // public List<AppointmentDTO> getAllAppointments() {
+    // return appointmentService.getAllAppointments();
+    // }
 
     @GetMapping
     public ResponseEntity<List<AppointmentDetailDTO>> getAllAppointments() {
@@ -54,7 +54,6 @@ public class AppointmentRestController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
-
 
     // Thêm mới một cuộc hẹn
     @PostMapping
@@ -80,7 +79,6 @@ public class AppointmentRestController {
                             .build());
         }
     }
-
 
     // Xóa một cuộc hẹn
     @DeleteMapping("/{id}")

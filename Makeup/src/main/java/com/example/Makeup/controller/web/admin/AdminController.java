@@ -12,15 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
     @Autowired
     private AppointmentRepository appointmentRepository;
@@ -32,6 +30,11 @@ public class AdminController {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @GetMapping("/home")
+    public String adminHome() {
+        return "admin";
+    }
 
     @GetMapping("/test")
     public String loginPage(Model model) {
@@ -62,11 +65,11 @@ public class AdminController {
     @GetMapping("/test5")
     public String loginPage4(Model model) {
         List<AppointmentDetailDTO> appointmentList = appointmentService.getAllAppointmentsDetail();
-//        appointmentList.forEach(appointment -> System.out.println("Appointment: " + appointment));
+        // appointmentList.forEach(appointment -> System.out.println("Appointment: " +
+        // appointment));
         model.addAttribute("appointmentList", appointmentList); // Truyền vào model
         return "admin/appointment-all";
     }
-
 
     @GetMapping("/appointments/stats/{year}")
     public ResponseEntity<Map<Integer, Long>> getAppointmentStats(@PathVariable int year) {
@@ -91,11 +94,10 @@ public class AdminController {
         }
     }
 
-
     @GetMapping("/appointments/stats/last30Days")
     public ResponseEntity<Map<String, Long>> getLast30DaysStats() {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH, -30);  // Lùi 30 ngày
+        calendar.add(Calendar.DAY_OF_MONTH, -30); // Lùi 30 ngày
         Date startDate = calendar.getTime();
         Date endDate = new Date();
 
@@ -111,12 +113,11 @@ public class AdminController {
 
         return ResponseEntity.ok(stats);
     }
-
 
     @GetMapping("/appointments/stats/last7Days")
     public ResponseEntity<Map<String, Long>> getLast7DaysStats() {
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH, -7);  // Lùi 7 ngày
+        calendar.add(Calendar.DAY_OF_MONTH, -7); // Lùi 7 ngày
         Date startDate = calendar.getTime();
         Date endDate = new Date();
 
@@ -132,7 +133,6 @@ public class AdminController {
 
         return ResponseEntity.ok(stats);
     }
-
 
     @GetMapping("/appointments/stats/thisMonth")
     public ResponseEntity<Map<Integer, Long>> getThisMonthStats() {
@@ -153,7 +153,8 @@ public class AdminController {
     }
 
     @GetMapping("/appointments/stats/customRange")
-    public ResponseEntity<Map<String, Long>> getCustomRangeStats(@RequestParam("startDate") String startDateStr, @RequestParam("endDate") String endDateStr) {
+    public ResponseEntity<Map<String, Long>> getCustomRangeStats(@RequestParam("startDate") String startDateStr,
+            @RequestParam("endDate") String endDateStr) {
         try {
             // Chuyển đổi chuỗi ngày thành đối tượng Date
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -177,7 +178,6 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Trả về mã lỗi nếu có lỗi
         }
     }
-
 
     @GetMapping("/orders/stats/{year}")
     public ResponseEntity<Map<Integer, Long>> getOrderStats(@PathVariable int year) {
@@ -225,7 +225,6 @@ public class AdminController {
         return ResponseEntity.ok(stats);
     }
 
-
     @GetMapping("/orders/stats/last7Days")
     public ResponseEntity<Map<String, Long>> getLast7DaysOrderStats() {
         Calendar calendar = Calendar.getInstance();
@@ -248,7 +247,6 @@ public class AdminController {
 
         return ResponseEntity.ok(stats);
     }
-
 
     @GetMapping("/orders/stats/thisMonth")
     public ResponseEntity<Map<Integer, Long>> getThisMonthOrderStats() {

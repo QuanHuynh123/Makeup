@@ -31,35 +31,34 @@ public class AccountService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Account> account =  accountRepository.findByUserName(username);
-        if (account.isPresent()){
+        Optional<Account> account = accountRepository.findByUserName(username);
+        if (account.isPresent()) {
             var userObj = account.get();
-            return  org.springframework.security.core.userdetails.User.builder()
+            return org.springframework.security.core.userdetails.User.builder()
                     .username(userObj.getUserName())
                     .password(userObj.getPassWord())
                     .roles(getRoles(userObj))
                     .build();
-        }else {
+        } else {
             throw new UsernameNotFoundException(username);
         }
     }
 
-    public String[] getRoles(Account account){
+    public String[] getRoles(Account account) {
         return (account.getRole() != null && account.getRole().getNameRole() != null)
                 ? account.getRole().getNameRole().split(",")
-                : new String[]{"USER"};
+                : new String[] { "USER" };
     }
 
-
-    public Account save(AccountDTO account){
+    public Account save(AccountDTO account) {
         Role role = roleRepository.findById(account.getRoleId())
-                .orElseThrow(()-> new AppException(ErrorCode.CANT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.CANT_FOUND));
         Account saveAccount = accountMapper.toEntity(account);
         saveAccount.setRole(role);
         return accountRepository.save(saveAccount);
     }
 
-    public boolean checkExists(String userName){
+    public boolean checkExists(String userName) {
         return accountRepository.existsByUserName(userName);
     }
 
@@ -103,7 +102,8 @@ public class AccountService implements UserDetailsService {
         }
     }
 
-    // Phương thức kiểm tra xem username đã tồn tại hay chưa (không phân biệt hoa thường)
+    // Phương thức kiểm tra xem username đã tồn tại hay chưa (không phân biệt hoa
+    // thường)
     public boolean isUsernameExists(String username) {
         Optional<Account> account = accountRepository.findByUserNameIgnoreCase(username);
         return account.isPresent();
